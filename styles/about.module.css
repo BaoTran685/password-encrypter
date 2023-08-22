@@ -1,0 +1,36 @@
+.about_wrap {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.about_title {
+  font-size: 25px;
+  color: darkred;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.about_content {
+  font-size: 19px;
+  list-style-type: disc;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.element {
+  margin: 3px;
+}
+
+.bold_1 {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: lightcoral;
+}
+
+.bold_2 {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: grey;
+}

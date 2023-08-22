@@ -1,0 +1,14 @@
+.home_wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.home_title {
+  font-size: 45px;
+  color: #42484d;
+  font-weight: 540;
+  margin: 20px 0px 80px;
+}

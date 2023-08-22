@@ -1,0 +1,196 @@
+import { useState } from 'react';
+import styles from '../styles/function.module.css';
+import Head from 'next/head';
+import randomNumber from '../func/randomNumber';
+import { useSession } from 'next-auth/react';
+
+import { notify_error, notify_info } from '@/lib/notify';
+
+const checkInput = (ls: string[]) => {
+  var flag = 1;
+  if (ls.length == 2 && isNaN(Number(ls[0])) || ls[0].trim() == '') {
+    flag = 0;
+    return flag;
+  }
+  ls.forEach((element) => {
+    if (element.trim() == '') {
+      flag = 0;
+    }
+  })
+  return flag;
+}
+
+const Function = () => {
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const {data: session}=useSession();
+
+  const encrypt = () => {
+    var text_input = input.split(' ');
+    var text = '', number = 0;
+    if (!checkInput(text_input)) {
+      notify_error('Invalid Input');
+      return;
+    }
+    if (text_input.length == 1) {
+      number = randomNumber(1000, 10000);
+      text = text_input[0];
+    }
+    else if (text_input.length == 2) {
+      number = parseInt(text_input[0]);
+      text = text_input[1];
+    }
+    else {
+      notify_error('Invalid Input');
+      return;
+    }
+    const postEncrypt = async () => {
+      const res = await fetch('/api/encrypt/route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': session?.user.accessToken!
+        },
+        body: JSON.stringify({ text, number })
+      })
+      return res.json();
+    }
+    postEncrypt().then(data => {
+      setOutput(`${number} ${data}`);
+    })
+  }
+  const decrypt = () => {
+    var text_input = input.split(' ');
+    if (!checkInput(text_input) || text_input.length != 2) {
+      notify_error('Invalid Input');
+      return;
+    }
+    var number = parseInt(text_input[0]), text = text_input[1];
+    const postData = async () => {
+      const res = await fetch('/api/decrypt/route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': session?.user.accessToken!
+        },
+        body: JSON.stringify({ text, number })
+      });
+      return res.json();
+    }
+    postData().then(data => {
+      setOutput(`${data}`);
+    })
+  }
+
+  const inputCopy = () => {
+    const input_area = document.getElementById('input') as HTMLTextAreaElement;
+    input_area.select();
+    input_area.setSelectionRange(0, 9999);
+    if (input) {
+			navigator.clipboard.writeText(input);
+			notify_info('Copied');
+		} else {
+			notify_error('Invalid Copy')
+		}
+  }
+  const inputPaste = async () => {
+    try {
+      const val = await navigator.clipboard.readText();
+      setInput(val);
+      notify_info('Pasted');
+    } catch(error) {
+      notify_error('Invalid Paste');
+    }
+  }
+  const inputClear = () => {
+    setInput('');
+  }
+  const outputCopy = () => {
+    const output_area = document.getElementById('output') as HTMLTextAreaElement;
+    output_area.select();
+    output_area.setSelectionRange(0, 9999);
+    if (output) {
+      console.log(output);
+			navigator.clipboard.writeText(output);
+			notify_info('Copied');
+		} else {
+			notify_error('Invalid Copy')
+		}
+  }
+  const outputClear = () => {
+    setOutput('');
+  }
+  const clear = () => {
+    inputClear();
+    outputClear();
+  }
+  return (
+    <>
+      <Head>
+        <title>
+          Password Encrypter || Encrypt/Decrypt
+        </title>
+        <meta name="keywords" content="Encrypter" />
+      </Head>
+      <div className={styles.section}>
+        <div className={styles.form__wrap}>
+          <textarea
+            id='input'
+            className={styles.form__input}
+            value={input}
+            onChange={(e) => { setInput(e.target.value) }}
+            placeholder="Enter Password..."
+          ></textarea>
+          <div className={styles.form__input__buttons}>
+            <button
+              className={styles.button}
+              onClick={inputCopy}
+            >Copy</button>
+            <button
+              className={styles.button}
+              onClick={inputPaste}
+            >Paste</button>
+            <button
+              className={styles.button}
+              onClick={inputClear}
+            >Clear</button>
+          </div>
+        </div>
+        <div className={styles.form__function__buttons}>
+          <button
+            className={`${styles.form__encrypt__button} ${styles.button}`}
+            onClick={encrypt}
+          >Encrypt</button>
+          <button
+            className={`${styles.form__decrypt__button} ${styles.button}`}
+            onClick={decrypt}
+          >Decrypt</button>
+          <button
+            className={styles.button}
+            onClick={clear}
+          >Clear</button>
+        </div>
+        <div className={styles.form__wrap}>
+          <textarea
+            id='output'
+            className={styles.form__output}
+            value={output}
+            placeholder="..."
+            readOnly></textarea>
+          <div className={styles.form__output__buttons}>
+            <button
+              className={styles.button}
+              onClick={outputCopy}
+            >Copy</button>
+            <button
+              className={styles.button}
+              onClick={outputClear}
+            >Clear</button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Function;

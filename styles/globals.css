@@ -1,0 +1,72 @@
+body {
+  background-color: #f2f2f2;
+  color: #333;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.content {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+nav {
+  margin: 10px auto 80px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+nav a,
+nav button {
+  margin: 0 6px;
+  padding: 0 8px;
+  font-size: 18px;
+  text-decoration: none;
+  font-weight: bold;
+  color: palevioletred;
+}
+
+nav button {
+  border: none;
+  background-color: none;
+}
+
+nav a:hover,
+nav a:focus,
+nav button:hover,
+nav button:focus {
+  background-color: lightsalmon;
+  border-radius: 15px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+nav button:hover,
+nav button:focus {
+  padding: 17px 8px;
+}
+
+nav .header {
+  margin-right: auto;
+  color: #F1356D;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+  margin-top: 60px;
+  color: #777;
+  border-top: 1px solid #ddd;
+}
+footer a {
+  margin-bottom: 20px;
+}
