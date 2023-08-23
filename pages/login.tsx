@@ -1,13 +1,23 @@
-import styles from '../styles/login.module.css';
-import { useState } from 'react';
 import Head from 'next/head';
+import styles from '../styles/login.module.css';
+import { useState, useEffect, FormEventHandler } from 'react';
 import { signIn, useSession } from 'next-auth/react';
+
+import { useRouter } from 'next/router';
+import Loader from '@/public/loader.svg';
+import { notify_error, notify_success } from '@/lib/notify';
 
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordType, setPasswordType] = useState("password");
+
+  const {data: session}=useSession();
+  const route=useRouter();
+
+  const [loading, setLoading]=useState(false);
+  const [disableButton, setDisableButton]=useState(false);
 
   const handleCheck = (flag: Boolean) => {
     if (flag === true) {
@@ -16,15 +26,31 @@ const Login = () => {
       setPasswordType("password");
     }
   }
-  const handleSubmit = (e: React.MouseEvent<Element, MouseEvent>) => {
+
+  const handleSubmit = async (e: React.MouseEvent<Element, MouseEvent>) => {
     e.preventDefault();
+    
+    setLoading(true);
+    setDisableButton(true);
+
     const postData = async () => {
       const res = await signIn('credentials', {
-        username, password, callbackUrl: '/'
+        username, password, redirect: false
       });
+      if (res?.ok) {
+        notify_success('Logged In');
+      } else {
+        notify_error('Invalid Username or Password');
+      }
     }
-    postData();
+    await postData();
+    setTimeout(() => {setLoading(false); setDisableButton(false)}, 150);
   }
+  useEffect(() => {
+    if (session?.user) {
+      route.push('/');
+    }
+  }, [session])
   return (
     <>
       <Head>
@@ -61,8 +87,11 @@ const Login = () => {
           <button
             type='submit'
             className={styles.login__button}
-            onClick={(e) => handleSubmit(e)}
-          >Log In</button>
+            disabled={disableButton}
+            onClick={(e)=>handleSubmit(e)}
+          >
+            {loading ? <Loader className={styles.spinner} /> : 'Log In'}
+          </button>
         </form>
       </div>
     </>

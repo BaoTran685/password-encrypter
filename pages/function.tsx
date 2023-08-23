@@ -5,6 +5,9 @@ import randomNumber from '../func/randomNumber';
 import { useSession } from 'next-auth/react';
 
 import { notify_error, notify_info } from '@/lib/notify';
+import Loader from '@/public/loader.svg';
+
+const MAX = 999999;
 
 const checkInput = (ls: string[]) => {
   var flag = 1;
@@ -23,14 +26,18 @@ const checkInput = (ls: string[]) => {
 const Function = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const {data: session}=useSession();
+
+  const { data: session } = useSession();
+  const [loading_encrypt, setLoadingEncrypt] = useState(false);
+  const [loading_decrypt, setLoadingDecrypt] = useState(false);
+	const [disableButton, setDisableButton] = useState(false);
 
   const encrypt = () => {
     var text_input = input.split(' ');
     var text = '', number = 0;
+
     if (!checkInput(text_input)) {
-      notify_error('Invalid Input');
-      return;
+      return notify_error('Invalid Input');
     }
     if (text_input.length == 1) {
       number = randomNumber(1000, 10000);
@@ -41,9 +48,14 @@ const Function = () => {
       text = text_input[1];
     }
     else {
-      notify_error('Invalid Input');
-      return;
+      return notify_error('Invalid Input');
     }
+    if (number > MAX) {
+      return notify_error('Invalid Input');
+    }
+
+    setLoadingEncrypt(true);
+    setDisableButton(true);
     const postEncrypt = async () => {
       const res = await fetch('/api/encrypt/route', {
         method: 'POST',
@@ -57,14 +69,18 @@ const Function = () => {
     }
     postEncrypt().then(data => {
       setOutput(`${number} ${data}`);
+      setLoadingEncrypt(false);
+      setDisableButton(false);
     })
   }
   const decrypt = () => {
     var text_input = input.split(' ');
     if (!checkInput(text_input) || text_input.length != 2) {
-      notify_error('Invalid Input');
-      return;
+      return notify_error('Invalid Input');
     }
+    
+    setLoadingDecrypt(true);
+    setDisableButton(true);
     var number = parseInt(text_input[0]), text = text_input[1];
     const postData = async () => {
       const res = await fetch('/api/decrypt/route', {
@@ -79,26 +95,25 @@ const Function = () => {
     }
     postData().then(data => {
       setOutput(`${data}`);
+      setLoadingDecrypt(false);
+      setDisableButton(false);
     })
   }
 
   const inputCopy = () => {
-    const input_area = document.getElementById('input') as HTMLTextAreaElement;
-    input_area.select();
-    input_area.setSelectionRange(0, 9999);
     if (input) {
-			navigator.clipboard.writeText(input);
-			notify_info('Copied');
-		} else {
-			notify_error('Invalid Copy')
-		}
+      navigator.clipboard.writeText(input);
+      notify_info('Copied');
+    } else {
+      notify_error('Invalid Copy')
+    }
   }
   const inputPaste = async () => {
     try {
       const val = await navigator.clipboard.readText();
       setInput(val);
       notify_info('Pasted');
-    } catch(error) {
+    } catch (error) {
       notify_error('Invalid Paste');
     }
   }
@@ -106,16 +121,13 @@ const Function = () => {
     setInput('');
   }
   const outputCopy = () => {
-    const output_area = document.getElementById('output') as HTMLTextAreaElement;
-    output_area.select();
-    output_area.setSelectionRange(0, 9999);
     if (output) {
       console.log(output);
-			navigator.clipboard.writeText(output);
-			notify_info('Copied');
-		} else {
-			notify_error('Invalid Copy')
-		}
+      navigator.clipboard.writeText(output);
+      notify_info('Copied');
+    } else {
+      notify_error('Invalid Copy')
+    }
   }
   const outputClear = () => {
     setOutput('');
@@ -135,7 +147,6 @@ const Function = () => {
       <div className={styles.section}>
         <div className={styles.form__wrap}>
           <textarea
-            id='input'
             className={styles.form__input}
             value={input}
             onChange={(e) => { setInput(e.target.value) }}
@@ -159,12 +170,18 @@ const Function = () => {
         <div className={styles.form__function__buttons}>
           <button
             className={`${styles.form__encrypt__button} ${styles.button}`}
+            disabled={disableButton}
             onClick={encrypt}
-          >Encrypt</button>
+          >
+            {loading_encrypt ? <Loader className={styles.spinner} /> : 'Encrypt'}
+          </button>
           <button
             className={`${styles.form__decrypt__button} ${styles.button}`}
-            onClick={decrypt}
-          >Decrypt</button>
+            disabled={disableButton}
+            onClick={decrypt} 
+          >
+            {loading_decrypt ? <Loader className={styles.spinner} /> : 'Decrypt'}
+          </button>
           <button
             className={styles.button}
             onClick={clear}
@@ -172,7 +189,6 @@ const Function = () => {
         </div>
         <div className={styles.form__wrap}>
           <textarea
-            id='output'
             className={styles.form__output}
             value={output}
             placeholder="..."

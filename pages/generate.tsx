@@ -4,11 +4,18 @@ import Head from 'next/head';
 import randomNumber from '../func/randomNumber';
 
 import { notify_error, notify_info } from '@/lib/notify';
+import Loader from '@/public/loader.svg'
+
+const MAX = 999999;
 
 const Generate = () => {
 	const [input, setInput] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [disableButton, setDisableButton] = useState(false);
+
 	const handleGenerate = () => {
 		var number = -1;
+
 		if (input == '') {
 			number = randomNumber(12, 17);
 		}
@@ -18,10 +25,12 @@ const Generate = () => {
 		if (!isNaN(Number(input)) && input.trim() != '') {
 			number = parseInt(input);
 		}
-		if (number < 0) {
-			notify_error('Invalid Input');
-			return;
+		if (number < 0 || number > MAX) {
+			return notify_error('Invalid Input');
 		}
+
+		setLoading(true);
+		setDisableButton(true);
 		const postData = async () => {
 			const res = await fetch('/api/generate/route', {
 				method: 'POST',
@@ -34,28 +43,26 @@ const Generate = () => {
 		}
 		postData().then(data => {
 			setInput(data);
+			setLoading(false);
+			setDisableButton(false);
 		});
 	}
 	const copy = () => {
-		const input_area = document.getElementById('input') as HTMLTextAreaElement;
-		input_area.select();
-		input_area.setSelectionRange(0, 9999);
 		if (input) {
 			navigator.clipboard.writeText(input);
 			notify_info('Copied');
 		} else {
 			notify_error('Invalid Copy')
 		}
-		
 	}
 	const paste = async () => {
 		try {
-      const val = await navigator.clipboard.readText();
-      setInput(val);
-      notify_info('Pasted');
-    } catch(error) {
-      notify_error('Invalid Paste');
-    }
+			const val = await navigator.clipboard.readText();
+			setInput(val);
+			notify_info('Pasted');
+		} catch (error) {
+			notify_error('Invalid Paste');
+		}
 	}
 	const clear = () => {
 		setInput('');
@@ -69,9 +76,7 @@ const Generate = () => {
 				<meta name="keywords" content="Encrypter" />
 			</Head>
 			<div className={styles.section}>
-				<div className={`${styles.form__error} ${styles.hidden}`}></div>
 				<textarea
-					id='input'
 					className={styles.form__input}
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
@@ -80,8 +85,11 @@ const Generate = () => {
 				<div className={styles.form__function__buttons}>
 					<button
 						className={`${styles.form__generate__button} ${styles.button}`}
+						disabled={disableButton}
 						onClick={handleGenerate}
-					>Generate</button>
+					>
+						{loading ? <Loader className={styles.spinner} /> : 'Generate'}
+					</button>
 					<button
 						className={styles.button}
 						onClick={copy}

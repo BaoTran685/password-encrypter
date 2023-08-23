@@ -10,6 +10,7 @@ import 'nprogress/nprogress.css'
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SessionProvider } from 'next-auth/react'
 
 export default function App({ Component, pageProps, router }: AppProps) {
   React.useEffect(() => {
@@ -27,7 +28,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
     }
   }, [router]);
   return (
-    <Provider>
+    <SessionProvider session={pageProps.session}>
       <Layout>
         <Component {...pageProps} />
         <ToastContainer
@@ -43,6 +44,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
           theme="light"
         />
       </Layout>
-    </Provider>
+    </SessionProvider>
   )
 }

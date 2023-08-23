@@ -56,3 +56,25 @@
 .form__generate__button:focus {
   background-color: #F082AC;
 }
+
+.form__generate__button:disabled {
+	cursor: default;
+  width: 107.05px;
+}
+
+.spinner {
+	animation-name: spin;
+	animation-duration: 500ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
