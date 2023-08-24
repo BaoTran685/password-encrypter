@@ -1,6 +1,6 @@
 import initData from "./init";
 
-const base_letters = "qwertyuiopasdfghjklzxcvbnm[]{};:',./<>?1234567890-=!@#$%^&*()_+QWERTYUIOPASDFGHJKLZXCVBNM";
+const base_letters = "qwertyuiopasdfghjklzxcvbnm[]{};:',./<>?1234567890-=!@#$%^&*()_+QWERTYUIOPASDFGHJKLZXCVBNM`~";
 
 function randomNumber(number) {
   return Math.floor(Math.random() * number);
@@ -77,7 +77,6 @@ function enSalt(text, number) {
 }
 function deSalt(text, number) {
   var { text_list, number_list } = getList(text, number, 0);
-
   for (let i = 0; i < number_list.length; i++) {
     var index = number_list[i];
     text_list.splice(index, 1);

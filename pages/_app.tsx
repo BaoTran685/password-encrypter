@@ -1,5 +1,3 @@
-
-import Provider from '@/components/SessionProvider'
 import Layout from '../components/Layout'
 import '@/styles/globals.css'
 
@@ -12,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from 'next-auth/react'
 
+import InitDb from '@/lib/initDb';
 export default function App({ Component, pageProps, router }: AppProps) {
   React.useEffect(() => {
     const handleRouteStart = () => NProgress.start();
