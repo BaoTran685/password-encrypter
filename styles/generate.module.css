@@ -67,17 +67,22 @@
     width: 700px;
     font-size: 14px;
   }
+  .form__input::placeholder {
+    font-size: 14px;
+  }
 }
 @media all and (max-width: 800px) {
   .form__input {
     width: 600px;
-    font-size: 14px;
   }
 }
 @media all and (max-width: 650px) {
   .form__input {
     width: 400px;
     height: 150px;
+    font-size: 12px;
+  }
+  .form__input::placeholder {
     font-size: 12px;
   }
   .button {
@@ -90,6 +95,9 @@
   .form__input {
     width: 300px;
     height: 130px;
+    font-size: 11px;
+  }
+  .form__input::placeholder {
     font-size: 11px;
   }
   .button {
