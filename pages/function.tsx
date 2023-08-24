@@ -8,6 +8,7 @@ import { notify_error, notify_info } from '@/lib/notify';
 import Loader from '@/public/loader.svg';
 
 const MAX = 999999;
+const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
 const checkInput = (ls: string[]) => {
   var flag = 1;
@@ -22,7 +23,14 @@ const checkInput = (ls: string[]) => {
   })
   return flag;
 }
-
+const checkText = (txt: string) => {
+  for (let i=0; i<txt.length; i++) {
+    if (BASE_LETTER.includes(txt[i])==false) {
+      return 0;
+    }
+  }
+  return 1;
+}
 const Function = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -50,7 +58,7 @@ const Function = () => {
     else {
       return notify_error('Invalid Input');
     }
-    if (number > MAX) {
+    if (number > MAX || !checkText(text)) {
       return notify_error('Invalid Input');
     }
 

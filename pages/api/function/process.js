@@ -1,6 +1,6 @@
 import initData from "./init";
 
-const base_letters = "qwertyuiopasdfghjklzxcvbnm[]{};:',./<>?1234567890-=!@#$%^&*()_+QWERTYUIOPASDFGHJKLZXCVBNM`~";
+const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
 function randomNumber(number) {
   return Math.floor(Math.random() * number);
@@ -66,7 +66,7 @@ function enSalt(text, number) {
   var { text_list, number_list } = getList(text, number, 1);
   for (let i = 0; i < number_list.length; i++) {
     var index = number_list[i] + i;
-    var char = base_letters[randomNumber(base_letters.length)];
+    var char = BASE_LETTER[randomNumber(BASE_LETTER.length)];
     text_list = [
       ...text_list.slice(0, index),
       char,
