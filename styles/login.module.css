@@ -33,6 +33,10 @@
 	font-size: 15px;
 	color: white;
 }
+.showPasswordBox {
+	width: 13px;
+	height: 13px;
+}
 
 .login__button {
 	background-color: #ba55d3;
@@ -71,11 +75,12 @@
 		width: 400px;
 		padding: 15px 10px;
 	}
-	.username, .password {
+	.username, .password, .passwordShowing {
 		font-size: 14px;
 	}
-	.passwordShowing {
-		font-size: 15px;
+	.showPasswordBox {
+		width: 11px;
+		height: 11px;
 	}
 	.login__button {
 		font-size: 16px;
@@ -88,11 +93,12 @@
 		width: 300px;
 		padding: 10px 10px;
 	}
-	.username, .password {
+	.username, .password, .passwordShowing {
 		font-size: 12px;
 	}
-	.passwordShowing {
-		font-size: 14.5px;
+	.showPasswordBox {
+		width: 10px;
+		height: 10px;
 	}
 	.login__button {
 		font-size: 15px;

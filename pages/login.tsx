@@ -80,6 +80,7 @@ const Login = () => {
           <div className={styles.showPassword}>
             <input
               type="checkbox"
+              className={styles.showPasswordBox}
               onChange={(e) => handleCheck(e.target.checked)}
             />
             <a className={styles.passwordShowing}> Show Password</a>

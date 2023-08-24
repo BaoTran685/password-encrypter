@@ -93,6 +93,7 @@ const SignInPage = () => {
           />
           <div className={styles.showPassword}>
             <input
+              className={styles.showPasswordBox}
               type="checkbox"
               onChange={(e) => handleCheck(e.target.checked)}
             />
