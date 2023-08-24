@@ -40,11 +40,6 @@ const Update = ({ users }) => {
     data.forEach(user => {
       notify_info(`${user.username} Deleted`)
     })
-    //tmr, create a protection for the api route, only admin can access certain routes: delete, register, user
-    //create 404 page and error page
-    //put something in the home page
-    //create something unique for each user, for example their own unique array of letters
-
   }
   const listRemove = (list, element) => {
     return list.filter((ele) => {

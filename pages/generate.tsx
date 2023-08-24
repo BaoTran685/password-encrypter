@@ -29,8 +29,13 @@ const Generate = () => {
 			return notify_error('Invalid Input');
 		}
 
+		const generate_button=document.getElementById('generate');
+		const width=generate_button?.offsetWidth;
 		setLoading(true);
 		setDisableButton(true);
+		if (generate_button) {
+			generate_button.style.width=`${width}px`;
+		}
 		const postData = async () => {
 			const res = await fetch('/api/generate/route', {
 				method: 'POST',
@@ -84,6 +89,7 @@ const Generate = () => {
 				></textarea>
 				<div className={styles.form__function__buttons}>
 					<button
+						id='generate'
 						className={`${styles.form__generate__button} ${styles.button}`}
 						disabled={disableButton}
 						onClick={handleGenerate}

@@ -75,12 +75,65 @@
 
 .form__encrypt__button:disabled {
   cursor: default;
-  width: 93.01px;
 }
 .form__decrypt__button:disabled {
 	cursor: default;
-  width: 94.01px;
 }
+
+
+@media all and (max-width: 1000px) {
+  .form__input, .form__output {
+    width: 700px;
+    font-size: 14px;
+  }
+  .form__input::placeholder,
+  .form__output::placeholder {
+    font-size: 14px;
+  }
+}
+@media all and (max-width: 800px) {
+  .form__input, .form__output {
+    width: 600px;
+  }
+}
+@media all and (max-width: 650px) {
+  .form__input, .form__output {
+    width: 400px;
+    height: 150px;
+    font-size: 12px;
+  }
+  .form__input::placeholder,
+  .form__output::placeholder {
+    font-size: 12px;
+  }
+  .button {
+    font-size: 16px;
+    height: 30px;
+    padding: 6px 14px;
+  }
+  .form__function__buttons {
+    margin: 7px 0;
+  }
+}
+@media all and (max-width: 500px) {
+  .form__input, .form__output {
+    width: 300px;
+    height: 130px;
+    font-size: 11px;
+  }
+  .form__input::placeholder,
+  .form__output::placeholder {
+    font-size: 11px;
+  }
+  .button {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+  .form__function__buttons {
+    margin: 4px 0;
+  }
+}
+
 
 .spinner {
 	animation-name: spin;

@@ -12,3 +12,29 @@
   font-weight: 540;
   margin: 20px 0px 80px;
 }
+
+@media all and (max-width: 900px) {
+  .home_title {
+    font-size: 40px;
+  }
+}
+@media all and (max-width: 700px) {
+  .home_title {
+    font-size: 35px;
+  }
+}
+@media all and (max-width: 600px) {
+  .home_title {
+    font-size: 30px;
+  }
+}
+@media all and (max-width: 500px) {
+  .home_title {
+    font-size: 25px;
+  }
+}
+@media all and (max-width: 500px) {
+  .home_title {
+    font-size: 20px;
+  }
+}

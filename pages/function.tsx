@@ -62,8 +62,13 @@ const Function = () => {
       return notify_error('Invalid Input');
     }
 
+    const encrypt_button=document.getElementById('encrypt');
+		const width=encrypt_button?.offsetWidth;
     setLoadingEncrypt(true);
     setDisableButton(true);
+    if (encrypt_button) {
+      encrypt_button.style.width=`${width}px`;
+    }
     const postEncrypt = async () => {
       const res = await fetch('/api/encrypt/route', {
         method: 'POST',
@@ -86,9 +91,13 @@ const Function = () => {
     if (!checkInput(text_input) || text_input.length != 2) {
       return notify_error('Invalid Input');
     }
-    
+    const decrypt_button=document.getElementById('decrypt');
+		const width=decrypt_button?.offsetWidth;
     setLoadingDecrypt(true);
     setDisableButton(true);
+    if (decrypt_button) {
+      decrypt_button.style.width=`${width}px`;
+    }
     var number = parseInt(text_input[0]), text = text_input[1];
     const postData = async () => {
       const res = await fetch('/api/decrypt/route', {
@@ -177,6 +186,7 @@ const Function = () => {
         </div>
         <div className={styles.form__function__buttons}>
           <button
+            id='encrypt'
             className={`${styles.form__encrypt__button} ${styles.button}`}
             disabled={disableButton}
             onClick={encrypt}
@@ -184,6 +194,7 @@ const Function = () => {
             {loading_encrypt ? <Loader className={styles.spinner} /> : 'Encrypt'}
           </button>
           <button
+            id='decrypt'
             className={`${styles.form__decrypt__button} ${styles.button}`}
             disabled={disableButton}
             onClick={decrypt} 

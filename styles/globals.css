@@ -2,6 +2,7 @@ body {
   background-color: #f2f2f2;
   color: #333;
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
 }
 
 .content {
@@ -26,6 +27,7 @@ nav button {
   text-decoration: none;
   font-weight: bold;
   color: palevioletred;
+  background-color: #f2f2f2;
 }
 
 nav button {
@@ -55,6 +57,77 @@ nav .header {
   color: #F1356D;
   font-weight: bold;
   font-size: 24px;
+}
+nav .wrap {
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+}
+
+@media all and (max-width: 1100px) {
+  nav {
+    display: flex;
+    flex-direction: column;
+  }
+  nav .header {
+    margin: auto;
+  }
+}
+@media all and (max-width: 700px) {
+  nav .header {
+    font-size: 20px;
+  }
+  nav a, nav button {
+    font-size: 16px;
+  }
+  nav button:hover,
+  nav button:focus {
+  padding: 15px 8px;
+  }
+}
+@media all and (max-width: 600px) {
+  nav .header {
+    font-size: 18px;
+  }
+  nav a, nav button {
+    font-size: 13px;
+    margin: 4px;
+  }
+  nav button:hover,
+  nav button:focus {
+    padding: 13px 8px;
+  }
+}
+@media all and (max-width: 500px) {
+  nav .header {
+    font-size: 16px;
+  }
+  nav a, nav button {
+    font-size: 11.3px;
+    margin: 3px;
+  }
+}
+@media all and (max-width: 450px) {
+  nav a, nav button {
+    font-size: 11px;
+  }
+  nav button:hover,
+  nav button:focus {
+    padding: 11px 8px;
+  }
+}
+@media all and (max-width: 400px) {
+  nav .header {
+    font-size: 14px;
+  }
+  nav a, nav button {
+    font-size: 11px;
+    margin: 2px;
+  }
+  nav button:hover,
+  nav button:focus {
+    padding: 10px 8px;
+  }
 }
 
 footer {

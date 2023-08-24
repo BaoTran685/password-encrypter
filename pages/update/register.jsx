@@ -96,7 +96,7 @@ const SignInPage = () => {
               type="checkbox"
               onChange={(e) => handleCheck(e.target.checked)}
             />
-            <a> Show Password</a>
+            <a className={styles.passwordShowing}> Show Password</a>
           </div>
           <button
             type='submit'

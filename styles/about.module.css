@@ -22,7 +22,33 @@
 .element {
   margin: 3px;
 }
-
+@media all and (max-width: 1400px) {
+  .about_title {
+    margin: auto;
+    font-size: 22px;
+  }
+  .about_content {
+    font-size: 18px;
+  }
+}
+@media all and (max-width: 1000px) {
+  .about_title {
+    margin: auto;
+    font-size: 20px;
+  }
+  .about_content {
+    font-size: 17px;
+  }
+}
+@media all and (max-width: 600px) {
+  .about_title {
+    margin: auto;
+    font-size: 19px;
+  }
+  .about_content {
+    font-size: 15px;
+  }
+}
 .bold_1 {
   font-weight: bold;
   text-transform: uppercase;
