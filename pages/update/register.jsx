@@ -31,17 +31,14 @@ const SignInPage = () => {
     });
     const users = await res.json();
     if (users.includes(username)) {
-      notify_error('Used Username');
       setUsername('');
-      return;
+      return notify_error('Used Username');
     }
     if (password !== confirmPassword) {
-      notify_error('Unmatched Passwords');
-      return;
+      return notify_error('Unmatched Passwords');
     }
     if (session.user.isAdmin==false) {
-      notify_error('Not Applicable');
-      return;
+      return notify_error('Not Applicable');
     }
     const postData = async () => {
       const res = await fetch('/api/register/route', {

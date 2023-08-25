@@ -6,7 +6,7 @@ const NotFound = () => {
     <div className={styles.wrap}>
       <h1>Oooops...</h1>
       <h2>The page cannot be found!!!</h2>
-      <h3>Go back to the <Link href='/'>Homepage</Link></h3>
+      <h3>Go back to the <Link href='/' className={styles.link}>Homepage</Link></h3>
     </div>
   );
 }

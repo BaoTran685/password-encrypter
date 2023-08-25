@@ -8,8 +8,11 @@ export default async function handler(req, res) {
       const users = await prisma.user.findMany();
       var usernameList = [];
       users.forEach(user => {
-        const { password, letters, ...userWithoutPassword } = user;
-        usernameList.push(userWithoutPassword);
+        const { password, letters, isAdmin, ...userWithoutPassword } = user;
+        console.log(isAdmin);
+        if (!isAdmin) {
+          usernameList.push(userWithoutPassword);
+        }
       });
       return res.status(200).json(usernameList);
     } else {

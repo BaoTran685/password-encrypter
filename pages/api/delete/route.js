@@ -14,7 +14,7 @@ export default async function handler(req, res) {
             id: list[i]
           }
         })
-        const { password, ...userWithoutPassword } = user;
+        const { password, letters, isAdmin, ...userWithoutPassword } = user;
         users.push(userWithoutPassword);
       }
       return res.status(200).json(users);

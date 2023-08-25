@@ -21,12 +21,10 @@ const Update = ({ users }) => {
 
   const handleDelete = async () => {
     if (list.length == 0) {
-      notify_error('No Users Selected');
-      return;
+      return notify_error('No Users Selected');
     }
     if (session.user.isAdmin == false) {
-      notify_error('Not Applicable');
-      return;
+      return notify_error('Not Applicable');
     }
     const res = await fetch('api/delete/route', {
       method: 'POST',
@@ -63,7 +61,7 @@ const Update = ({ users }) => {
       <button className={styles.button} onClick={handleDelete}>Delete</button>
       <div className={styles.wrap}>
         {users.map(user => {
-          if (user.isAdmin == false) {
+          if (user) {
             return <div
               id='users'
               className={styles.single}
