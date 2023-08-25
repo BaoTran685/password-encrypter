@@ -10,6 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SessionProvider } from 'next-auth/react'
 
+import { Analytics } from '@vercel/analytics/react';
+
 import InitDb from '@/lib/initDb';
 export default function App({ Component, pageProps, router }: AppProps) {
   React.useEffect(() => {
@@ -29,6 +31,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <SessionProvider session={pageProps.session}>
       <Layout>
+        <Analytics />
         <Component {...pageProps} />
         <ToastContainer
           position="bottom-right"
