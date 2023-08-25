@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
-import sumNumber from "./sum";
 import { verifyJwt } from "@/lib/jwt";
+import { redis } from '@/lib/redis';
+
+import sumNumber from "./sum";
 
 export default async function initData(number, type, accessToken) {
   var l = process.env.DATA_LENGTH;
@@ -9,20 +11,35 @@ export default async function initData(number, type, accessToken) {
 
   const getData = async () => {
     if (logIn) {
-      const data = await prisma.user.findUnique({
-        where: {
-          id: logIn.id
-        }
-      });
-      return data;
+      const cachedData = await redis.get(`${logIn.id}-${n}`);
+      if (cachedData) {
+        return cachedData;
+      } else {
+        const data = await prisma.user.findUnique({
+          where: {
+            id: logIn.id
+          }
+        });
+        const { letters } = data;
+        const ls = letters[n];
+        await redis.set(`${logIn.id}-${n}`, JSON.stringify(ls));
+        return ls;
+      }
     } else {
-      const data = await prisma.data.findMany();
-      return data[0];
+      const cachedData = await redis.get(`DATA_FOR_USER-${n}`);
+      if (cachedData) {
+        return cachedData;
+      } else {
+        const data = await prisma.data.findMany();
+        const { letters } = data[0];
+        const ls = letters[n];
+        await redis.set(`DATA_FOR_USER-${n}`, JSON.stringify(ls));
+        return ls;
+      }
     }
   }
-  const { letters } = await getData();
-  var list = letters[n].split('');
-
+  const listGot = await getData();
+  var list = listGot.split('');
   if (type == 0) {
     list.reverse();
   }
