@@ -78,13 +78,22 @@ const Function = () => {
         },
         body: JSON.stringify({ text, number })
       })
-      return res.json();
+      if (res.ok) {
+        const data=await res.json();
+        setOutput(`${number} ${data}`);
+        setLoadingEncrypt(false);
+        setDisableButton(false);
+			} else {
+				const retryAfter = await res.json();
+				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter*1000);
+				setTimeout(()=> {
+					setLoadingEncrypt(false);
+					setDisableButton(false);
+				}, retryAfter*1000)
+				return null;
+			}
     }
-    postEncrypt().then(data => {
-      setOutput(`${number} ${data}`);
-      setLoadingEncrypt(false);
-      setDisableButton(false);
-    })
+    postEncrypt();
   }
   const decrypt = () => {
     var text_input = input.split(' ');
@@ -108,13 +117,22 @@ const Function = () => {
         },
         body: JSON.stringify({ text, number })
       });
-      return res.json();
+      if (res.ok) {
+        const data=await res.json();
+        setOutput(`${number} ${data}`);
+        setLoadingDecrypt(false);
+        setDisableButton(false);
+			} else {
+				const retryAfter = await res.json();
+				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter*1000);
+				setTimeout(()=> {
+					setLoadingDecrypt(false);
+					setDisableButton(false);
+				}, retryAfter*1000)
+				return null;
+			}
     }
-    postData().then(data => {
-      setOutput(`${data}`);
-      setLoadingDecrypt(false);
-      setDisableButton(false);
-    })
+    postData();
   }
 
   const inputCopy = () => {

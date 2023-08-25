@@ -29,12 +29,12 @@ const Generate = () => {
 			return notify_error('Invalid Input');
 		}
 
-		const generate_button=document.getElementById('generate');
-		const width=generate_button?.offsetWidth;
+		const generate_button = document.getElementById('generate');
+		const width = generate_button?.offsetWidth;
 		setLoading(true);
 		setDisableButton(true);
 		if (generate_button) {
-			generate_button.style.width=`${width}px`;
+			generate_button.style.width = `${width}px`;
 		}
 		const postData = async () => {
 			const res = await fetch('/api/generate/route', {
@@ -44,13 +44,22 @@ const Generate = () => {
 				},
 				body: JSON.stringify({ number })
 			});
-			return res.json();
+			if (res.ok) {
+				const data = await res.json();
+				setInput(data);
+				setLoading(false);
+				setDisableButton(false);
+			} else {
+				const retryAfter = await res.json();
+				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter * 1000);
+				setTimeout(() => {
+					setLoading(false);
+					setDisableButton(false);
+				}, retryAfter * 1000)
+				return null;
+			}
 		}
-		postData().then(data => {
-			setInput(data);
-			setLoading(false);
-			setDisableButton(false);
-		});
+		postData();
 	}
 	const copy = () => {
 		if (input) {

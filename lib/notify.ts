@@ -1,9 +1,9 @@
 
 import { toast } from 'react-toastify';
 
-export const notify_error = (txt: String) => toast.error(txt, {
+export const notify_error = (txt: String, time: Number=5000) => toast.error(txt, {
   position: "bottom-right",
-  autoClose: 5000,
+  autoClose: time as any,
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import styles from '../styles/404.module.css';
 
-
 const InteralError = () => {
   return (
     <div className={styles.wrap}>
@@ -11,5 +10,5 @@ const InteralError = () => {
     </div>
   );
  }
-  
- export default InteralError;
+
+export default InteralError;
