@@ -119,7 +119,7 @@ const Function = () => {
       });
       if (res.ok) {
         const data=await res.json();
-        setOutput(`${number} ${data}`);
+        setOutput(`${data}`);
         setLoadingDecrypt(false);
         setDisableButton(false);
 			} else {
