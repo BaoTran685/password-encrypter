@@ -22,7 +22,7 @@ export default async function initData(number, type, accessToken) {
         });
         const { letters } = data;
         const ls = letters[n];
-        await redis.set(`${logIn.id}-${n}`, JSON.stringify(ls));
+        await redis.set(`${logIn.id}-${n}`, ls);
         return ls;
       }
     } else {
@@ -33,7 +33,7 @@ export default async function initData(number, type, accessToken) {
         const data = await prisma.data.findMany();
         const { letters } = data[0];
         const ls = letters[n];
-        await redis.set(`DATA_FOR_USER-${n}`, JSON.stringify(ls));
+        await redis.set(`DATA_FOR_USER-${n}`, ls);
         return ls;
       }
     }
