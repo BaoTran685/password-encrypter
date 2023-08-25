@@ -69,6 +69,8 @@ const Function = () => {
     if (encrypt_button) {
       encrypt_button.style.width=`${width}px`;
     }
+
+    text=text.replace(/(\r\n|\n|\r)/gm, "");
     const postEncrypt = async () => {
       const res = await fetch('/api/encrypt/route', {
         method: 'POST',
@@ -107,7 +109,9 @@ const Function = () => {
     if (decrypt_button) {
       decrypt_button.style.width=`${width}px`;
     }
+    
     var number = parseInt(text_input[0]), text = text_input[1];
+    text=text.replace(/(\r\n|\n|\r)/gm, "");
     const postData = async () => {
       const res = await fetch('/api/decrypt/route', {
         method: 'POST',
