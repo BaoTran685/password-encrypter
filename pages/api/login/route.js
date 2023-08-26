@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       }
     })
     if (user && (await bcrypt.compare(body.password, user.password))) {
-      const { password, letters, ...userWithoutPassword } = user;
+      const { password, letters, idAdmin, ...userWithoutPassword } = user;
       const accessToken = signJwt(userWithoutPassword);
       const result = {
         ...userWithoutPassword, accessToken

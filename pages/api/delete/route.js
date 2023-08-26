@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 export default async function handler(req, res) {
   if (req.method == 'POST') {
     const accessToken=req.headers.authorization;
-    console.log();
     if (accessToken && verifyJwt(accessToken)?.isAdmin==true) {
       const { list } = req.body;
       var users = [];

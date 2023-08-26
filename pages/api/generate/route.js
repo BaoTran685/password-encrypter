@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     const { success, reset } = await ratelimit.limit(ip);
     if (!success) {
       const now=Date.now();
-      const retryAfter=Math.floor((reset-now)/1000);
+      const retryAfter=reset-now;
       return res.status(429).json(retryAfter);
     }
     else {

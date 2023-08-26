@@ -7,6 +7,7 @@ import { notify_error, notify_info } from '@/lib/notify';
 import Loader from '@/public/loader.svg'
 
 const MAX = 999999;
+const DELAY = 200;
 
 const Generate = () => {
 	const [input, setInput] = useState('');
@@ -51,11 +52,11 @@ const Generate = () => {
 				setDisableButton(false);
 			} else {
 				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter * 1000);
+				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
 				setTimeout(() => {
 					setLoading(false);
 					setDisableButton(false);
-				}, retryAfter * 1000)
+				}, retryAfter+DELAY);
 				return null;
 			}
 		}
@@ -66,7 +67,7 @@ const Generate = () => {
 			navigator.clipboard.writeText(input);
 			notify_info('Copied');
 		} else {
-			notify_error('Invalid Copy')
+			notify_error('Invalid Copy - No Input')
 		}
 	}
 	const paste = async () => {

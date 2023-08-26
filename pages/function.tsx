@@ -8,6 +8,7 @@ import { notify_error, notify_info } from '@/lib/notify';
 import Loader from '@/public/loader.svg';
 
 const MAX = 999999;
+const DELAY = 200;
 const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
 const checkInput = (ls: string[]) => {
@@ -87,11 +88,11 @@ const Function = () => {
         setDisableButton(false);
 			} else {
 				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter*1000);
+				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
 				setTimeout(()=> {
 					setLoadingEncrypt(false);
 					setDisableButton(false);
-				}, retryAfter*1000)
+				}, retryAfter+DELAY);
 				return null;
 			}
     }
@@ -128,11 +129,11 @@ const Function = () => {
         setDisableButton(false);
 			} else {
 				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${retryAfter}s`, retryAfter*1000);
+				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
 				setTimeout(()=> {
-					setLoadingDecrypt(false);
+					setLoadingEncrypt(false);
 					setDisableButton(false);
-				}, retryAfter*1000)
+				}, retryAfter+DELAY);
 				return null;
 			}
     }
