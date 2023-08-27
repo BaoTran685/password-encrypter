@@ -1,14 +1,15 @@
-
 .wrap {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 .link {
   text-decoration: none;
   color: #00c46a;
 }
+
 .link:hover {
   color: darkorange;
   text-decoration: underline;

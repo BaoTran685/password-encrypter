@@ -1,10 +1,8 @@
 import initData from "./init";
+import randomNumber from '@/func/randomNumber';
 
 const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
-function randomNumber(number) {
-  return Math.floor(Math.random() * number);
-}
 function deeperProcess(list, dict, text, number) {
   var result = '';
   var u = text.length;
@@ -21,7 +19,7 @@ function convert(number, base) {
 function process(list, dict, text, number, type) {
   var ls = [number, convert(number, 5)];
   var res = '';
-  if (type == 0) {
+  if (type == false) {
     //decrypt
     ls.reverse();
     res = deSalt(text, number);
@@ -32,7 +30,7 @@ function process(list, dict, text, number, type) {
   for (let i = 0; i < ls.length; i++) {
     res = deeperProcess(list, dict, res, ls[i]);
   }
-  if (type == 0) {
+  if (type == false) {
     //decrypt
     return res;
   } else {
@@ -66,7 +64,7 @@ function enSalt(text, number) {
   var { text_list, number_list } = getList(text, number, 1);
   for (let i = 0; i < number_list.length; i++) {
     var index = number_list[i] + i;
-    var char = BASE_LETTER[randomNumber(BASE_LETTER.length)];
+    var char = BASE_LETTER[randomNumber(0, BASE_LETTER.length)];
     text_list = [
       ...text_list.slice(0, index),
       char,

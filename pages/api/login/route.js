@@ -8,13 +8,12 @@ export default async function handler(req, res) {
     if (credentialsAccessToken!=process.env.CREDENTIALS_TOKEN) {
       return res.status(401).json('unauthorized route')
     }
-
     const body = req.body;
     const user = await prisma.user.findUnique({
       where: {
         username: body.username,
       }
-    })
+    });
     if (user && (await bcrypt.compare(body.password, user.password))) {
       const { password, letters, idAdmin, ...userWithoutPassword } = user;
       const accessToken = signJwt(userWithoutPassword);

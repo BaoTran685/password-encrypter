@@ -4,63 +4,75 @@ import Head from 'next/head';
 import randomNumber from '../func/randomNumber';
 
 import { notify_error, notify_info } from '@/lib/notify';
-import Loader from '@/public/loader.svg'
+import Loader from '@/public/loader.svg';
 
 const MAX = 999999;
 const DELAY = 200;
+const LOWER = 12;
+const HIGHER = 17;
 
+const checkInput = (input: string) => {
+	var number = 0;
+	if (input == '') {
+		number = randomNumber(LOWER, HIGHER);
+	}
+	if (input.split(' ').length == 1 && input.length != 0) {
+		number = input.length;
+	}
+	if (input.split(' ').length > 1) {
+		notify_error('Too Many Input');
+		return null;
+	}
+	if (!isNaN(Number(input)) && input.trim() != '') {
+		number = parseInt(input);
+	}
+	if (number <= 0 || number > MAX) {
+		notify_error('Input Out of Range');
+		return null;
+	}
+	return { number };
+}
 const Generate = () => {
 	const [input, setInput] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [disableButton, setDisableButton] = useState(false);
 
 	const handleGenerate = () => {
-		var number = -1;
-
-		if (input == '') {
-			number = randomNumber(12, 17);
-		}
-		if (input.split(' ').length == 1 && input.length != 0) {
-			number = input.length;
-		}
-		if (!isNaN(Number(input)) && input.trim() != '') {
-			number = parseInt(input);
-		}
-		if (number < 0 || number > MAX) {
-			return notify_error('Invalid Input');
-		}
-
-		const generate_button = document.getElementById('generate');
-		const width = generate_button?.offsetWidth;
-		setLoading(true);
-		setDisableButton(true);
-		if (generate_button) {
-			generate_button.style.width = `${width}px`;
-		}
-		const postData = async () => {
-			const res = await fetch('/api/generate/route', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ number })
-			});
-			if (res.ok) {
-				const data = await res.json();
-				setInput(data);
-				setLoading(false);
-				setDisableButton(false);
-			} else {
-				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
-				setTimeout(() => {
+		const back = checkInput(input);
+		if (back) {
+			const { number } = back;
+			const generate_button = document.getElementById('generate');
+			const width = generate_button?.offsetWidth;
+			setLoading(true);
+			setDisableButton(true);
+			if (generate_button) {
+				generate_button.style.width = `${width}px`;
+			}
+			const postData = async () => {
+				const res = await fetch('/api/generate/route', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ number })
+				});
+				if (res.ok) {
+					const data = await res.json();
+					setInput(data);
 					setLoading(false);
 					setDisableButton(false);
-				}, retryAfter+DELAY);
-				return null;
+				} else {
+					const retryAfter = await res.json();
+					notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter / 1000)} seconds`, retryAfter);
+					setTimeout(() => {
+						setLoading(false);
+						setDisableButton(false);
+					}, retryAfter + DELAY);
+					return null;
+				}
 			}
+			postData();
 		}
-		postData();
 	}
 	const copy = () => {
 		if (input) {

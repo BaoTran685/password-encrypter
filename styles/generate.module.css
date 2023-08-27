@@ -59,7 +59,7 @@
 }
 
 .form__generate__button:disabled {
-	cursor: default;
+	cursor: not-allowed;
 }
 
 @media all and (max-width: 1000px) {

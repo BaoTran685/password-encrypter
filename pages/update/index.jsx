@@ -1,8 +1,13 @@
 import Link from "next/link";
 import styles from "../../styles/update.module.css";
 import { notify_error, notify_info } from "@/lib/notify";
-import { useSession } from "next-auth/react";
+import Loader from '@/public/loader.svg';
 
+import { useState } from 'react';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+
+const DELAY = 200;
 export const getServerSideProps = async () => {
   const res = await fetch(`${process.env.BASE_URL}/api/user/route`, {
     method: 'GET',
@@ -16,9 +21,15 @@ export const getServerSideProps = async () => {
   }
 }
 const Update = ({ users }) => {
-  var list = [];
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
+  const handleRefresh = () => {
+    router.reload();
+  }
   const handleDelete = async () => {
     if (list.length == 0) {
       return notify_error('No Users Selected');
@@ -26,6 +37,8 @@ const Update = ({ users }) => {
     if (session.user.isAdmin == false) {
       return notify_error('Not Applicable');
     }
+    setLoading(true);
+    setDisableButton(true);
     const res = await fetch('api/delete/route', {
       method: 'POST',
       headers: {
@@ -33,32 +46,55 @@ const Update = ({ users }) => {
         'authorization': session.user.accessToken
       },
       body: JSON.stringify({ list })
-    })
-    const data = await res.json();
-    data.forEach(user => {
-      notify_info(`${user.username} Deleted`)
-    })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data) {
+        data.forEach(user => {
+          notify_info(`${user.username} Deleted`);
+        });
+        handleRefresh();
+      }
+    } else {
+      const retryAfter = await res.json();
+      notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter / 1000)} seconds`, retryAfter);
+      setTimeout(() => {
+        setLoading(false);
+        setDisableButton(false);
+      }, retryAfter + DELAY);
+    }
+
   }
   const listRemove = (list, element) => {
     return list.filter((ele) => {
       return ele != element;
     });
   }
-
+  const listAdd = (list, element) => {
+    return list.push(element);
+  }
   const handleClick = (e) => {
     const id = e.target.closest('#users').getAttribute('key-id');
+    console.log(typeof list);
     if (list.includes(id)) {
-      list = listRemove(list, id);
+      setList(list => [...listRemove(list, id)]);
       e.target.style.borderLeft = '8px solid #4979ff';
     } else {
-      list.push(id);
+      setList(list => [...list, id]);
       e.target.style.borderLeft = '8px solid #ffb545';
     }
   }
   return (
     <div>
       <Link className={styles.button} href='/update/register'>Register User</Link>
-      <button className={styles.button} onClick={handleDelete}>Delete</button>
+      <button
+        id='delete'
+        className={styles.button}
+        disabled={disableButton}
+        onClick={handleDelete}
+      >
+        {loading ? <Loader className={styles.spinner} /> : 'Delete'}
+      </button>
       <div className={styles.wrap}>
         {users.map(user => {
           if (user) {

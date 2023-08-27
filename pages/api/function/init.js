@@ -39,6 +39,7 @@ export default async function initData(number, type, accessToken) {
     }
   }
   const listGot = await getData();
+  console.log(listGot);
   var list = listGot.split('');
   if (type == 0) {
     list.reverse();

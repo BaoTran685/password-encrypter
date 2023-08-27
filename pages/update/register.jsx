@@ -12,7 +12,7 @@ const SignInPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordType, setPasswordType] = useState("password");
 
-  const {data: session}=useSession();
+  const { data: session } = useSession();
   const handleCheck = (flag) => {
     if (flag === true) {
       setPasswordType("text");
@@ -37,7 +37,7 @@ const SignInPage = () => {
     if (password !== confirmPassword) {
       return notify_error('Unmatched Passwords');
     }
-    if (session.user.isAdmin==false) {
+    if (session.user.isAdmin == false) {
       return notify_error('Not Applicable');
     }
     const postData = async () => {

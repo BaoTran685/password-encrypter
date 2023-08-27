@@ -8,30 +8,55 @@ import { notify_error, notify_info } from '@/lib/notify';
 import Loader from '@/public/loader.svg';
 
 const MAX = 999999;
+const LOWER = 1000;
+const HIGHER = 100000;
 const DELAY = 200;
 const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
-const checkInput = (ls: string[]) => {
-  var flag = 1;
-  if (ls.length == 2 && isNaN(Number(ls[0])) || ls[0].trim() == '') {
-    flag = 0;
-    return flag;
-  }
-  ls.forEach((element) => {
-    if (element.trim() == '') {
-      flag = 0;
-    }
-  })
-  return flag;
-}
 const checkText = (txt: string) => {
-  for (let i=0; i<txt.length; i++) {
-    if (BASE_LETTER.includes(txt[i])==false) {
+  for (let i = 0; i < txt.length; i++) {
+    if (BASE_LETTER.includes(txt[i]) == false) {
       return 0;
     }
   }
   return 1;
 }
+
+const checkInput = (ls: string[]) => {
+  var number: number = 0, text: string = '';
+  if (ls.length == 1) {
+    text = ls[0];
+    if (text == '' || !checkText(text)) {
+      notify_error('Non Admissible Text')
+      return null;
+    }
+  } else if (ls.length == 2) {
+    console.log(ls);
+    if (isNaN(Number(ls[0])) || ls[0] == '') {
+      notify_error('Non Admissible Key');
+      return null;
+    }
+    number = parseInt(ls[0]);
+    text = ls[1];
+    if (number < 0 || number > MAX) {
+      notify_error('Non Admissible Key');
+      return null;
+    }
+    if (!checkText(text) || text == '') {
+      notify_error('Non Admissible Text');
+      return null;
+    }
+  } else {
+    notify_error('Non Admissible Text')
+    return null;
+  }
+  if (number == 0) {
+    number = randomNumber(LOWER, HIGHER);
+  }
+  text = text.replace(/(\r\n|\n|\r)/gm, '');
+  return { number, text };
+}
+
 const Function = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -39,116 +64,89 @@ const Function = () => {
   const { data: session } = useSession();
   const [loading_encrypt, setLoadingEncrypt] = useState(false);
   const [loading_decrypt, setLoadingDecrypt] = useState(false);
-	const [disableButton, setDisableButton] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
+
+  const postData = async (text: string, number: number, type: boolean) => {
+    const res = await fetch('/api/encrypt/route', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': session?.user.accessToken!
+      },
+      body: JSON.stringify({ text, number, type })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (type === true) {
+        setLoadingEncrypt(false);
+        setOutput(`${number} ${data}`);
+      } else {
+        setLoadingDecrypt(false);
+        setOutput(`${data}`);
+      }
+      setDisableButton(false);
+    } else {
+      const retryAfter = await res.json();
+      notify_error(`Too Many Requests - Try Again After ${Math.ceil(retryAfter / 1000)} seconds`, retryAfter);
+      setTimeout(() => {
+        if (type === true) {
+          setLoadingEncrypt(false);
+        } else {
+          setLoadingDecrypt(false);
+        }
+        setDisableButton(false);
+      }, retryAfter + DELAY);
+    }
+  }
 
   const encrypt = () => {
-    var text_input = input.split(' ');
-    var text = '', number = 0;
-
-    if (!checkInput(text_input)) {
-      return notify_error('Invalid Input');
+    const text_input = input.split(' ');
+    const back = checkInput(text_input);
+    if (back) {
+      const { number, text } = back;
+      const encrypt_button = document.getElementById('encrypt');
+      const width = encrypt_button?.offsetWidth;
+      setLoadingEncrypt(true);
+      setDisableButton(true);
+      if (encrypt_button) {
+        encrypt_button.style.width = `${width}px`;
+      }
+      postData(text, number, true);
     }
-    if (text_input.length == 1) {
-      number = randomNumber(1000, 10000);
-      text = text_input[0];
-    }
-    else if (text_input.length == 2) {
-      number = parseInt(text_input[0]);
-      text = text_input[1];
-    }
-    else {
-      return notify_error('Invalid Input');
-    }
-    if (number > MAX || !checkText(text)) {
-      return notify_error('Invalid Input');
-    }
-
-    const encrypt_button=document.getElementById('encrypt');
-		const width=encrypt_button?.offsetWidth;
-    setLoadingEncrypt(true);
-    setDisableButton(true);
-    if (encrypt_button) {
-      encrypt_button.style.width=`${width}px`;
-    }
-
-    text=text.replace(/(\r\n|\n|\r)/gm, "");
-    const postEncrypt = async () => {
-      const res = await fetch('/api/encrypt/route', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': session?.user.accessToken!
-        },
-        body: JSON.stringify({ text, number })
-      })
-      if (res.ok) {
-        const data=await res.json();
-        setOutput(`${number} ${data}`);
-        setLoadingEncrypt(false);
-        setDisableButton(false);
-			} else {
-				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
-				setTimeout(()=> {
-					setLoadingEncrypt(false);
-					setDisableButton(false);
-				}, retryAfter+DELAY);
-				return null;
-			}
-    }
-    postEncrypt();
+    return;
   }
+
   const decrypt = () => {
-    var text_input = input.split(' ');
-    if (!checkInput(text_input) || text_input.length != 2) {
-      return notify_error('Invalid Input');
+    const text_input = input.split(' ');
+    const back = checkInput(text_input);
+
+    if (text_input.length != 2) {
+      notify_error('Two Inputs Required');
+      return;
     }
-    const decrypt_button=document.getElementById('decrypt');
-		const width=decrypt_button?.offsetWidth;
-    setLoadingDecrypt(true);
-    setDisableButton(true);
-    if (decrypt_button) {
-      decrypt_button.style.width=`${width}px`;
+    if (back) {
+      const { number, text } = back;
+      const decrypt_button = document.getElementById('decrypt');
+      const width = decrypt_button?.offsetWidth;
+      setLoadingDecrypt(true);
+      setDisableButton(true);
+      if (decrypt_button) {
+        decrypt_button.style.width = `${width}px`;
+      }
+      postData(text, number, false);
     }
-    
-    var number = parseInt(text_input[0]), text = text_input[1];
-    text=text.replace(/(\r\n|\n|\r)/gm, "");
-    const postData = async () => {
-      const res = await fetch('/api/decrypt/route', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': session?.user.accessToken!
-        },
-        body: JSON.stringify({ text, number })
-      });
-      if (res.ok) {
-        const data=await res.json();
-        setOutput(`${data}`);
-        setLoadingDecrypt(false);
-        setDisableButton(false);
-			} else {
-				const retryAfter = await res.json();
-				notify_error(`Too Many Attemps - Retry After ${Math.ceil(retryAfter/1000)} seconds`, retryAfter);
-				setTimeout(()=> {
-					setLoadingEncrypt(false);
-					setDisableButton(false);
-				}, retryAfter+DELAY);
-				return null;
-			}
-    }
-    postData();
   }
 
-  const inputCopy = () => {
-    if (input) {
-      navigator.clipboard.writeText(input);
+  const copy = (type: boolean) => {
+    const toCopy = type ? input : output;
+    if (toCopy) {
+      navigator.clipboard.writeText(toCopy);
       notify_info('Copied');
     } else {
       notify_error('Invalid Copy')
     }
   }
-  const inputPaste = async () => {
+  const paste = async () => {
     try {
       const val = await navigator.clipboard.readText();
       setInput(val);
@@ -157,25 +155,18 @@ const Function = () => {
       notify_error('Invalid Paste');
     }
   }
-  const inputClear = () => {
-    setInput('');
-  }
-  const outputCopy = () => {
-    if (output) {
-      console.log(output);
-      navigator.clipboard.writeText(output);
-      notify_info('Copied');
+  const choosingClear = (type: boolean) => {
+    if (type) {
+      setInput('');
     } else {
-      notify_error('Invalid Copy')
+      setOutput('');
     }
   }
-  const outputClear = () => {
+  const clear = () => {
+    setInput('');
     setOutput('');
   }
-  const clear = () => {
-    inputClear();
-    outputClear();
-  }
+  
   return (
     <>
       <Head>
@@ -195,15 +186,15 @@ const Function = () => {
           <div className={styles.form__input__buttons}>
             <button
               className={styles.button}
-              onClick={inputCopy}
+              onClick={() => { copy(true) }}
             >Copy</button>
             <button
               className={styles.button}
-              onClick={inputPaste}
+              onClick={paste}
             >Paste</button>
             <button
               className={styles.button}
-              onClick={inputClear}
+              onClick={() => { choosingClear(true) }}
             >Clear</button>
           </div>
         </div>
@@ -220,7 +211,7 @@ const Function = () => {
             id='decrypt'
             className={`${styles.form__decrypt__button} ${styles.button}`}
             disabled={disableButton}
-            onClick={decrypt} 
+            onClick={decrypt}
           >
             {loading_decrypt ? <Loader className={styles.spinner} /> : 'Decrypt'}
           </button>
@@ -238,11 +229,11 @@ const Function = () => {
           <div className={styles.form__output__buttons}>
             <button
               className={styles.button}
-              onClick={outputCopy}
+              onClick={() => { copy(false) }}
             >Copy</button>
             <button
               className={styles.button}
-              onClick={outputClear}
+              onClick={() => { choosingClear(false) }}
             >Clear</button>
           </div>
         </div>

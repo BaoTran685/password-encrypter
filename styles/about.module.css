@@ -22,36 +22,44 @@
 .element {
   margin: 3px;
 }
+
 @media all and (max-width: 1400px) {
   .about_title {
     margin: auto;
     font-size: 22px;
   }
+
   .about_content {
     padding: 0 0 0 30px;
   }
+
   .about_content {
     font-size: 18px;
   }
 }
+
 @media all and (max-width: 1000px) {
   .about_title {
     font-size: 20px;
   }
+
   .about_content {
     font-size: 17px;
     padding: 0 0 0 25px;
   }
 }
+
 @media all and (max-width: 600px) {
   .about_title {
     font-size: 19px;
   }
+
   .about_content {
     font-size: 15px;
     padding: 0 0 0 20px;
   }
 }
+
 .bold_1 {
   font-weight: bold;
   text-transform: uppercase;

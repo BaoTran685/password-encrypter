@@ -43,37 +43,65 @@
   background-color: lightgrey;
 }
 
+.button:disabled {
+  cursor: not-allowed;
+}
+
 @media all and (max-width: 900px) {
   .wrap {
     grid-template-columns: 1fr 1fr 1fr;
   }
+
   .single {
     font-size: 18px;
     margin: 18px 10px;
     padding: 15px 25px;
   }
 }
+
 @media all and (max-width: 600px) {
   .single {
     font-size: 16px;
     margin: 16px 10px;
     padding: 15px 20px;
   }
+
   .button {
     font-size: 17px;
     height: 35px;
     padding: 8px 15px;
   }
 }
+
 @media all and (max-width: 450px) {
   .single {
     font-size: 14px;
     margin: 14px 8px;
     padding: 13px 18px;
   }
+
   .button {
     font-size: 16px;
     height: 30px;
     padding: 6px 14px;
+  }
+}
+
+
+
+.spinner {
+  animation-name: spin;
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
