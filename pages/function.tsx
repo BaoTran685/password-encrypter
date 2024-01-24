@@ -7,9 +7,9 @@ import { useSession } from 'next-auth/react';
 import { notify_error, notify_info } from '@/lib/notify';
 import Loader from '@/public/loader.svg';
 
-const MAX = 999999;
-const LOWER = 1000;
-const HIGHER = 100000;
+const MAX = 999999999;
+const LOWER = 10000;
+const HIGHER = MAX;
 const DELAY = 200;
 const BASE_LETTER = "U)bgrV]DP<jFl>ifGoBJhw8e4d'sX_#Ma;/@W(N7pL?-StH^yu:*Q,E!k&20CTx5%I9[1ZOR.K+6A{Y}cznq=$m3v`~|";
 
@@ -22,44 +22,41 @@ const checkText = (txt: string) => {
   return 1;
 }
 
-const checkInput = (ls: string[]) => {
-  var number: number = 0, text: string = '';
+const checkInput = (input: string, number: string) => {
+  var ls: string[] = input.split(' ');
+  var text_to_post: string = '';
+  var number_to_post: number = 0;
+
+  // Check Text Input
   if (ls.length == 1) {
-    text = ls[0];
-    if (text == '' || !checkText(text)) {
+    text_to_post = ls[0];
+    if (text_to_post == '' || !checkText(text_to_post)) {
       notify_error('Non Admissible Text')
-      return null;
-    }
-  } else if (ls.length == 2) {
-    console.log(ls);
-    if (isNaN(Number(ls[0])) || ls[0] == '') {
-      notify_error('Non Admissible Key');
-      return null;
-    }
-    number = parseInt(ls[0]);
-    text = ls[1];
-    if (number < 0 || number > MAX) {
-      notify_error('Non Admissible Key');
-      return null;
-    }
-    if (!checkText(text) || text == '') {
-      notify_error('Non Admissible Text');
       return null;
     }
   } else {
     notify_error('Non Admissible Text')
     return null;
   }
-  if (number == 0) {
-    number = randomNumber(LOWER, HIGHER);
+  // Check Number Key Input
+  if (!isNaN(Number(number))) {
+    number_to_post = Number(number);
+    if (! (LOWER <= number_to_post && number_to_post <= HIGHER)) {
+      notify_error('Non Admissible Key');
+      return null;
+    }
+  } else {
+    notify_error('Non Admissible Key');
+    return null;
   }
-  text = text.replace(/(\r\n|\n|\r)/gm, '');
-  return { number, text };
+  text_to_post = text_to_post.replace(/(\r\n|\n|\r)/gm, '');
+  return { text_to_post, number_to_post };
 }
 
 const Function = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
+  const [number, setNumber] = useState('');
 
   const { data: session } = useSession();
   const [loading_encrypt, setLoadingEncrypt] = useState(false);
@@ -77,10 +74,13 @@ const Function = () => {
     });
     if (res.ok) {
       const data = await res.json();
+      // Output
       if (type === true) {
+        // For the Encrypt Func
         setLoadingEncrypt(false);
-        setOutput(`${number} ${data}`);
+        setOutput(`${data}`);
       } else {
+        // For the Decrypt Func
         setLoadingDecrypt(false);
         setOutput(`${data}`);
       }
@@ -100,10 +100,10 @@ const Function = () => {
   }
 
   const encrypt = () => {
-    const text_input = input.split(' ');
-    const back = checkInput(text_input);
+    const back = checkInput(input, number);
     if (back) {
-      const { number, text } = back;
+      const { text_to_post, number_to_post } = back;
+      // Loading Effect on the Button
       const encrypt_button = document.getElementById('encrypt');
       const width = encrypt_button?.offsetWidth;
       setLoadingEncrypt(true);
@@ -111,21 +111,18 @@ const Function = () => {
       if (encrypt_button) {
         encrypt_button.style.width = `${width}px`;
       }
-      postData(text, number, true);
+      // Post Data
+      postData(text_to_post, number_to_post, true);
     }
     return;
   }
 
   const decrypt = () => {
-    const text_input = input.split(' ');
-    const back = checkInput(text_input);
+    const back = checkInput(input, number);
 
-    if (text_input.length != 2) {
-      notify_error('Two Inputs Required');
-      return;
-    }
     if (back) {
-      const { number, text } = back;
+      const { text_to_post, number_to_post } = back;
+      // Loading Effect on the Button
       const decrypt_button = document.getElementById('decrypt');
       const width = decrypt_button?.offsetWidth;
       setLoadingDecrypt(true);
@@ -133,10 +130,15 @@ const Function = () => {
       if (decrypt_button) {
         decrypt_button.style.width = `${width}px`;
       }
-      postData(text, number, false);
+      // Post Data
+      postData(text_to_post, number_to_post, false);
     }
   }
 
+  const random = () => {
+    var random_number: number = randomNumber(LOWER, HIGHER);
+    setNumber(String(random_number));
+  }
   const copy = (type: boolean) => {
     const toCopy = type ? input : output;
     if (toCopy) {
@@ -165,6 +167,7 @@ const Function = () => {
   const clear = () => {
     setInput('');
     setOutput('');
+    setNumber('');
   }
   
   return (
@@ -176,6 +179,21 @@ const Function = () => {
         <meta name="keywords" content="Encrypter" />
       </Head>
       <div className={styles.section}>
+        <div className={styles.form__wrap}>
+          <textarea
+            className={styles.form__number}
+            value={number}
+            onChange={(e) => { setNumber(e.target.value) }}
+            placeholder="Enter Number Key..."
+          >
+          </textarea>
+          <div className={styles.form__number__buttons}>
+            <button
+              className={styles.button}
+              onClick={random}
+            >Random</button>
+          </div>
+        </div>
         <div className={styles.form__wrap}>
           <textarea
             className={styles.form__input}

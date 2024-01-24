@@ -8,6 +8,7 @@
 
 .form__wrap {
   position: relative;
+  margin: 5px 0;
 }
 
 .form__input,
@@ -22,12 +23,25 @@
   font-size: 16px;
 }
 
+.form__number {
+  width: 900px;
+  height: 80px;
+  padding: 10px;
+  border-radius: 8px;
+  resize: none;
+  background-color: #383b40;
+  color: #ffddbe;
+  font-size: 16px;
+}
+
+.form__number::placeholder,
 .form__input::placeholder,
 .form__output::placeholder {
   font-size: 16px;
   color: #ffddbe;
 }
 
+.form__number__buttons,
 .form__input__buttons,
 .form__output__buttons {
   position: absolute;
@@ -36,7 +50,7 @@
 }
 
 .form__function__buttons {
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .button {
@@ -81,12 +95,14 @@
 
 @media all and (max-width: 1000px) {
 
+  .form__number,
   .form__input,
   .form__output {
     width: 700px;
     font-size: 14px;
   }
 
+  .form__number::placeholder,
   .form__input::placeholder,
   .form__output::placeholder {
     font-size: 14px;
@@ -95,6 +111,7 @@
 
 @media all and (max-width: 800px) {
 
+  .form__number,
   .form__input,
   .form__output {
     width: 600px;
@@ -103,13 +120,19 @@
 
 @media all and (max-width: 650px) {
 
+  .form__number,
   .form__input,
   .form__output {
     width: 400px;
-    height: 150px;
+    height: 140px;
     font-size: 12px;
   }
+  
+  .form__number {
+    height: 80px;
+  }
 
+  .form__number::placeholder,
   .form__input::placeholder,
   .form__output::placeholder {
     font-size: 12px;
@@ -122,12 +145,13 @@
   }
 
   .form__function__buttons {
-    margin: 7px 0;
+    margin: 3px 0;
   }
 }
 
 @media all and (max-width: 500px) {
 
+  .form__number,
   .form__input,
   .form__output {
     width: 300px;
@@ -135,6 +159,11 @@
     font-size: 11px;
   }
 
+  .form__number {
+    height: 70px;
+  }
+
+  .form__number::placeholder,
   .form__input::placeholder,
   .form__output::placeholder {
     font-size: 11px;
@@ -146,7 +175,7 @@
   }
 
   .form__function__buttons {
-    margin: 4px 0;
+    margin: 1px 0;
   }
 }
 

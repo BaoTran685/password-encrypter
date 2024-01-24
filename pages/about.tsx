@@ -22,7 +22,7 @@ const About = () => {
         <div className={styles.about_title}>Instruction</div>
         <ul className={styles.about_content}>
           <li className={styles.element}>For the <span className={styles.bold_1}>Generate Page</span>, you can choose to enter a number to specify <span className={styles.bold_2}>the length</span> or otherwise <span className={styles.bold_2}>the length</span> will be random.</li>
-          <li className={styles.element}>For the <span className={styles.bold_1}>Encrypt/Decrypt Page</span>, you can choose to enter a number before the text to specify the <span className={styles.bold_2}>encrypting/decrypting key</span>.</li>
+          <li className={styles.element}>For the <span className={styles.bold_1}>Encrypt/Decrypt Page</span>, you can choose to enter a number key to specify the <span className={styles.bold_2}>encrypting/decrypting key</span>.</li>
           <li className={styles.element}>For the <span className={styles.bold_1}>Login Page</span>, it is <span className={styles.bold_2}>only</span> for me.</li>
         </ul>
       </div>
