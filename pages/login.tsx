@@ -32,7 +32,6 @@ const Login = () => {
     
     setLoading(true);
     setDisableButton(true);
-    console.log(username, password);
     const postData = async () => {
       const res = await signIn('credentials', {
         username, password, redirect: false
