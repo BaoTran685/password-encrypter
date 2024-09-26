@@ -2,7 +2,10 @@
 
 import InputItem from "@/components/form/inputItem";
 import LoadingButton from "@/components/form/loadingButton";
+import { generatePassword } from "@/components/form/postData";
+import { cn } from "@/lib/tailwind-merge";
 import { FormEvent, useState } from "react";
+
 // label,
 //   name,
 //   type,
@@ -21,7 +24,7 @@ const Input = {
     readonly: false,
   },
   upperCase: {
-    label: "Number of Upper Case Letter",
+    label: "Number of Upper-Case Letters",
     name: "upperCase",
     type: "number",
     placeholder: "0",
@@ -35,54 +38,90 @@ const Input = {
     readonly: true,
   },
 };
+const LOW = 0;
+const HIGH = 20;
 
 const Generate = () => {
   const [specialChar, setSpecialChar] = useState();
   const [specialCharError, setSpecialCharError] = useState(false);
-  const [specialCharErrorMessage, setSpecialCharErrorMessage] = useState('');
+  const [specialCharErrorMessage, setSpecialCharErrorMessage] = useState("");
 
   const [upperCase, setUpperCase] = useState();
   const [upperCaseError, setUpperCaseError] = useState(false);
-  const [upperCaseErrorMessage, setUpperCaseErrorMessage] = useState('');
+  const [upperCaseErrorMessage, setUpperCaseErrorMessage] = useState("");
 
   const [password, setPassword] = useState("");
 
   const [process, setProcess] = useState(false);
+  const [processMessage, setProcessMessage] = useState("");
+  const [isProcessSuccess, setIsProcessSuccess] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    const checkInput = ({specialChar, upperCase} : {specialChar: number | undefined, upperCase: number | undefined}) => {
+
+    const checkInput = ({
+      specialChar,
+      upperCase,
+    }: {
+      specialChar: number;
+      upperCase: number;
+    }) => {
       var ret = true;
-      if (specialChar == undefined || specialChar < 0) {
+      if (specialChar < LOW || specialChar > HIGH) {
         setSpecialCharError(true);
-        setSpecialCharErrorMessage('Must be >= 0');
+        setSpecialCharErrorMessage(`Must be >= ${LOW} and <= ${HIGH}`);
         ret = false;
       }
-      if (upperCase == undefined || upperCase < 0) {
+      if (upperCase < LOW || upperCase > HIGH) {
         setUpperCaseError(true);
-        setUpperCaseErrorMessage('Must be >= 0');
+        setUpperCaseErrorMessage(`Must be >= ${LOW} and <= ${HIGH}`);
         ret = false;
       }
       return ret;
+    };
+
+    if (specialChar == undefined) {
+      setSpecialCharError(true);
+      setSpecialCharErrorMessage('Please enter field');
     }
-    const ok = checkInput({specialChar, upperCase});
+    if (upperCase == undefined) {
+      setUpperCaseError(true);
+      setUpperCaseErrorMessage('Please enter field');
+    }
+    if (specialChar == undefined || upperCase == undefined) return;
+
+    const ok = checkInput({ specialChar, upperCase });
     if (!ok) {
       return;
     }
-    
+
+    setProcess(true);
+    const res = await generatePassword({
+      specialChar,
+      upperCase,
+    });
+
+    setPassword(res.password);
+    setIsProcessSuccess(res.ok);
+    if (res.ok) {
+      setProcessMessage("success");
+    } else {
+      setProcessMessage("fail");
+    }
+    setProcess(false);
   };
 
   const handleChange = (event: FormEvent<HTMLFormElement>) => {
     if (event.currentTarget.name == Input.specialChar.name) {
       setSpecialChar(event.currentTarget.value);
       setSpecialCharError(false);
-      setSpecialCharErrorMessage('');
+      setSpecialCharErrorMessage("");
     } else if (event.currentTarget.name == Input.upperCase.name) {
       setUpperCase(event.currentTarget.value);
       setUpperCaseError(false);
-      setUpperCaseErrorMessage('');
+      setUpperCaseErrorMessage("");
     }
+    setProcessMessage("");
   };
 
   return (
@@ -100,7 +139,9 @@ const Generate = () => {
               {...Input.specialChar}
             />
             {specialCharError && (
-              <div className="text-sm font-medium text-red-600 pt-1">{specialCharErrorMessage}</div>
+              <div className="text-sm font-medium text-red-600 pt-1">
+                {specialCharErrorMessage}
+              </div>
             )}
           </div>
           <div>
@@ -111,7 +152,9 @@ const Generate = () => {
               {...Input.upperCase}
             />
             {upperCaseError && (
-              <div className="text-sm font-medium text-red-600 pt-1">{upperCaseErrorMessage}</div>
+              <div className="text-sm font-medium text-red-600 pt-1">
+                {upperCaseErrorMessage}
+              </div>
             )}
           </div>
         </div>
@@ -128,6 +171,16 @@ const Generate = () => {
             onChange={() => {}}
             {...Input.password}
           />
+          {Boolean(processMessage) && (
+            <div
+              className={cn("text-sm font-medium", {
+                "text-[#21A179]": isProcessSuccess,
+                "text-red-600": !isProcessSuccess,
+              })}
+            >
+              {processMessage}
+            </div>
+          )}
         </div>
       </form>
     </main>
@@ -135,4 +188,3 @@ const Generate = () => {
 };
 
 export default Generate;
-
