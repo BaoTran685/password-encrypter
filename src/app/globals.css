@@ -17,13 +17,22 @@
 
   --light-blue-color: #54b3d6;
   --dark-blue-color: #3b819d;
+
+  --grey-color: #45474B; /* texts */
+  --purple-color: #8A2387; /* header */
+  --red-color: #E94057; /* header */
+  --light-orange-color: #ec5e06; /* header + navbar */ 
+  --orange-color: #ec5e06; /* #D25600 */
+  --blue-color: #54b3d6; /* #00A6ED */
+  --light-blue-color: #54b3d6;
+  --dark-blue-color: #4491af;
 }
 @layer components {
   .text--main--header {
     @apply text-2xl md:text-3xl lg:text-4xl;
   }
   .text--header {
-    @apply text-2xl md:text-3xl;
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
   }
   .text--sub--header {
     @apply text-lg md:text-xl lg:text-2xl;
