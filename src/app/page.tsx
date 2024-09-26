@@ -1,10 +1,9 @@
-import AnimateText from "@/components/animateText";
 
 const Home = () => {
   return (
     <main className="my-10 sm:my-20">
       <div className="flex pl-10">
-        <ol className="text--content list-disc space-y-2">
+        <ol className="text--content list-disc space-y-2 sm:space-y-4">
           <li>Hello...! This app is the renew version of the ...</li>
           <li>
             <span className="text-[--red-color] font-bold">
