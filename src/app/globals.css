@@ -3,25 +3,121 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --background-white-color: white;
+  --background-grey-color: #f4f4f5;
+  --text-gray-color: #37352F;
+  --placeholder-grey-color: #A1A1AA;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --black-color: #1E1E24;
+  --pink-color: #FB9F89;
+  --khaki-color: #D5C7B8;
+  --blue-color: #81AE9D;
+  --green-color: #21A179;
+  --dark-green-color: #2f7d65;
+
+  --light-blue-color: #54b3d6;
+  --dark-blue-color: #3b819d;
+}
+@layer components {
+  .text--main--header {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+  .text--header {
+    @apply text-2xl md:text-3xl;
+  }
+  .text--sub--header {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+  .text--content {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+  .text--sub--content {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  .text--sub--small {
+    @apply text-sm lg:text-base
+  }
+  .my--container {
+    @apply w-full sm:w-[600px] md:w-[600px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px];
+  }
+  .layout {
+    @apply grid grid-cols-[minmax(40px,1fr)_minmax(auto,708px)_minmax(40px,1fr)] sm:grid-cols-[minmax(96px,1fr)_minmax(auto,708px)_minmax(96px,1fr)];
+  }
+  .input--box {
+    @apply block w-full rounded-lg bg-inherit focus:border-[#1E1E24] transition-colors ease-linear placeholder:text-[#A1A1AA] appearance-none focus:outline-none;
+  }
+  .input--line {
+    @apply block w-full bg-inherit border-b-2 focus:border-b-[#1E1E24] transition-colors ease-linear placeholder:text-[#A1A1AA] appearance-none focus:outline-none;
+  }
+  
+  .box--shadow {
+    box-shadow: 0 6px 28px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+  .brighter--shadow--green {
+    box-shadow: 0 0 0.7rem #81AE9D;
+  }
+  .brighter--shadow--khaki {
+    box-shadow: 0 0 0.3rem #D5C7B8;
+  }
+  .brighter--shadow--red {
+    box-shadow: 0 0 0.3rem #dc2626;
+  }
+  .loader-dot, .loader-div {
+    display: inline-block; /* Ensures it behaves like an inline element */
+    width: 30px; /* Adjust as needed */
+    height: 12px;
+    --_g: no-repeat radial-gradient(circle closest-side, #adadad 90%, #0000);
+    background: 
+      var(--_g) 0% 50%,
+      var(--_g) 50% 50%,
+      var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+  }
+
+  @keyframes l3 {
+    20% { background-position: 0% 0%, 50% 50%, 100% 50%; }
+    40% { background-position: 0% 100%, 50% 0%, 100% 50%; }
+    60% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+    80% { background-position: 0% 50%, 50% 50%, 100% 100%; }
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer base {
+  * {
+    scroll-behavior: smooth;
+  }
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--light-blue-color);
+    border-radius: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--dark-blue-color);
+    cursor: auto;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: black;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px inherit;
+  }
+  .no--select {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Standard */
+    cursor: default;
   }
 }
