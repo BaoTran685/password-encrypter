@@ -16,11 +16,34 @@ export const generatePassword = async ({
     },
     body: JSON.stringify({ specialChar, upperCase })
   })
-  
+
   if (res.ok) {
-    console.log('true');
     const { password } = await res.json()
-    return {password, ok: res.ok}
+    return { password, ok: res.ok }
   }
-  return {password: '', ok: false}
+  return { password: '', ok: false }
+}
+
+export const functionPassword = async ({
+  key,
+  password,
+  type
+}: {
+  key: string
+  password: string
+  type: string
+}) => {
+  const res = await fetch(SERVER_URL + '/function/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ key, password, type })
+  })
+  console.log(res);
+  if (res.ok) {
+    const { password } = await res.json()
+    return { password, ok: res.ok }
+  }
+  return { password: '', ok: false }
 }

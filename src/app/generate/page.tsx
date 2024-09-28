@@ -69,12 +69,12 @@ const Generate = () => {
       var ret = true;
       if (specialChar < LOW || specialChar > HIGH) {
         setSpecialCharError(true);
-        setSpecialCharErrorMessage(`Must be >= ${LOW} and <= ${HIGH}`);
+        setSpecialCharErrorMessage(`Must be between ${LOW} and ${HIGH}`);
         ret = false;
       }
       if (upperCase < LOW || upperCase > HIGH) {
         setUpperCaseError(true);
-        setUpperCaseErrorMessage(`Must be >= ${LOW} and <= ${HIGH}`);
+        setUpperCaseErrorMessage(`Must be between ${LOW} and ${HIGH}`);
         ret = false;
       }
       return ret;
@@ -161,8 +161,10 @@ const Generate = () => {
         <LoadingButton
           type="submit"
           text="Generate"
+          className=""
           isLoading={process}
           isSuccess={false}
+          onClick={() => {}}
         />
         <div>
           <InputItem
