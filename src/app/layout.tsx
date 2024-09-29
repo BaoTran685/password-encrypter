@@ -19,10 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={inter.className}
+        className={`${inter.className} bg-[--background-black-color] text-[white]`}
       >
-        <div className="container mx-auto text-[--text-gray-color]">
-          <div className="mx-4 md:mx-6 lg:md-8">
+        <div className="container mx-auto">
+          <div className="mx-4 md:mx-6 lg:mx-8">
             <Header />
             {children}
             <Footer />

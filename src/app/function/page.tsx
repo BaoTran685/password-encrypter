@@ -116,7 +116,7 @@ const Encrypt = () => {
     <main className="my--container mx-auto my-10 sm:my20">
       <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-2">
+          <div className="col-span-3">
             <InputItem
               value={key}
               isError={Boolean(keyErrorMessage)}
@@ -129,7 +129,7 @@ const Encrypt = () => {
               </div>
             )}
           </div>
-          <div className="col-span-10">
+          <div className="col-span-9">
             <InputItem
               value={password}
               isError={Boolean(passwordErrorMessage)}
@@ -147,7 +147,7 @@ const Encrypt = () => {
           <LoadingButton
             type="button"
             text="Encrypt"
-            className="bg-[--red-color]"
+            className="bg-green-700"
             isLoading={processEncrypt}
             isSuccess={false}
             onClick={handleClick}
@@ -155,7 +155,7 @@ const Encrypt = () => {
           <LoadingButton
             type="button"
             text="Decrypt"
-            className="bg-[--orange-color]"
+            className="bg-yellow-700"
             isLoading={processDecrypt}
             isSuccess={false}
             onClick={handleClick}

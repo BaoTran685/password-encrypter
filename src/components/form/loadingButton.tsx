@@ -14,7 +14,7 @@ const LoadingButton = ({ type, text, className, isLoading, isSuccess, onClick }:
   return (
     <button
       type={type}
-      className={`text-white text--sub--small w-full rounded-lg bg-[#2f7d65] hover:brightness-125 ${className}`}
+      className={`text-white text--sub--small w-full rounded-lg hover:brightness-125 ${className}`}
       onClick={() => onClick({text})}
       disabled={isLoading}
     >

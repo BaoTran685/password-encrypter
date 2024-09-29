@@ -161,7 +161,7 @@ const Generate = () => {
         <LoadingButton
           type="submit"
           text="Generate"
-          className=""
+          className="bg-lime-700"
           isLoading={process}
           isSuccess={false}
           onClick={() => {}}

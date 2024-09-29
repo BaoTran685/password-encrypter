@@ -24,14 +24,14 @@ const InputItem = ({
     <>
       <label
         htmlFor={name}
-        className="text-black text-sm font-medium block mb-2"
+        className="text-white text-sm font-medium block mb-2"
       >
         {label}
       </label>
       <input
         name={name}
         type={type}
-        className={cn(`text--content text-black input--box border-2 p-2`, {
+        className={cn(`text-sm text-white input--box p-2.5`, {
           "border-red-600": isError === true,
           "border-[#A1A1AA]": isError === false,
         })}

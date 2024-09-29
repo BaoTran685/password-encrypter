@@ -4,8 +4,9 @@
 
 :root {
   --background-white-color: white;
+  --background-black-color: #121212;
   --background-grey-color: #f4f4f5;
-  --text-gray-color: #37352F;
+  --text-gray-color: #cbd5e1;
   --placeholder-grey-color: #A1A1AA;
 
   --black-color: #1E1E24;
@@ -33,7 +34,7 @@
     @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
   }
   .text--sub--header {
-    @apply text-lg md:text-xl lg:text-2xl;
+    @apply text-base md:text-lg lg:text-xl;
   }
   .text--content {
     @apply text-base md:text-lg lg:text-xl;
@@ -51,45 +52,12 @@
     @apply grid grid-cols-[minmax(40px,1fr)_minmax(auto,708px)_minmax(40px,1fr)] sm:grid-cols-[minmax(96px,1fr)_minmax(auto,708px)_minmax(96px,1fr)];
   }
   .input--box {
-    @apply block w-full rounded-lg bg-inherit focus:border-[#1E1E24] transition-colors ease-linear placeholder:text-[#A1A1AA] appearance-none focus:outline-none;
+    @apply block w-full rounded-lg bg-[#18191E] border border-[#33353F] focus:border-[white] placeholder-[#9CA2A9];
   }
   .input--line {
     @apply block w-full bg-inherit border-b-2 focus:border-b-[#1E1E24] transition-colors ease-linear placeholder:text-[#A1A1AA] appearance-none focus:outline-none;
   }
-  
-  .box--shadow {
-    box-shadow: 0 6px 28px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  }
-  .brighter--shadow--green {
-    box-shadow: 0 0 0.7rem #81AE9D;
-  }
-  .brighter--shadow--khaki {
-    box-shadow: 0 0 0.3rem #D5C7B8;
-  }
-  .brighter--shadow--red {
-    box-shadow: 0 0 0.3rem #dc2626;
-  }
-  .loader-dot, .loader-div {
-    display: inline-block; /* Ensures it behaves like an inline element */
-    width: 30px; /* Adjust as needed */
-    height: 12px;
-    --_g: no-repeat radial-gradient(circle closest-side, #adadad 90%, #0000);
-    background: 
-      var(--_g) 0% 50%,
-      var(--_g) 50% 50%,
-      var(--_g) 100% 50%;
-    background-size: calc(100% / 3) 50%;
-    animation: l3 1s infinite linear;
-  }
-
-  @keyframes l3 {
-    20% { background-position: 0% 0%, 50% 50%, 100% 50%; }
-    40% { background-position: 0% 100%, 50% 0%, 100% 50%; }
-    60% { background-position: 0% 50%, 50% 100%, 100% 0%; }
-    80% { background-position: 0% 50%, 50% 50%, 100% 100%; }
-  }
 }
-
 
 @layer base {
   * {
