@@ -33,7 +33,7 @@ const InputItem = ({
         type={type}
         className={cn(`text-sm text-white input--box p-2.5`, {
           "border-red-600": isError === true,
-          "border-[#A1A1AA]": isError === false,
+          "border-[#33353F]": isError === false,
         })}
         placeholder={placeholder}
         value={value}
