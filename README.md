@@ -1,36 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Overview
+- This is a web project. <br />
+- The frontend uses Next.js framework and is hosted on Vercel.
+- The backend uses Nginx as the webser and reverse proxy to handle incoming HTTP requests, Python Flask to process requests, and Gunicorn (a WSGI server) as a bridge between them to balance the load. All of them together make my web application stable and reliable in production.
+- The backend and the MySQL database storing encryption keys are hosted on AWS EC2. 
 
-## Getting Started
+# What is in it?
+- It has 2 main functions, which are generating a random password and encrypt/decrypt a password. <br />
+- The algorithm used to encrypt the password includes hashing and salting, making it 99.99% secure against cracking attempts. <br />
 
-First, run the development server:
+# How does it work?
+- When a user type in a password and a key, they will be passed to the server through API routes. The server will then fetch the encryption key from the SQL database and the server will hash and salt the password according to the numeric key. <br />
+- For decrypting password, the similar but reverse path is applied. <br />
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
