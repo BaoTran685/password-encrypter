@@ -2,7 +2,7 @@
 const Home = () => {
   return (
     <main className="my-10 sm:my-20">
-      <div className="flex pl-10">
+      <div className="flex px-6 sm:px-8 lg:px-10">
         <ol className="text--content list-disc space-y-2 sm:space-y-4">
           <li>Hello...! This app is the renew version of the ...</li>
           <li>

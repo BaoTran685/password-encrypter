@@ -39,7 +39,7 @@ const Input = {
   },
 };
 const LOW = 0;
-const HIGH = 20;
+const HIGH = 100;
 
 const Generate = () => {
   const [specialChar, setSpecialChar] = useState();
