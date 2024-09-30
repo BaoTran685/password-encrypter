@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <nav>
-      <div className="flex flex-col sm:flex-row sm:justify-between py-4 sm:py-5 md:py-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between py-4 sm:py-6">
         <Link href="/">
           <p className="text--main--header font-bold text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-yellow-600 text-center">
             Password Encrypter

@@ -113,7 +113,7 @@ const FunctionForm = () => {
   };
 
   return (
-    <main className="my--container mx-auto my-10 sm:my20">
+    <main className="my--container mx-auto my-10 sm:my-20">
       <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-3">
