@@ -12,8 +12,8 @@ const links = [
     color: 'white',
   },
   {
-    link: "/function",
-    name: "Encrypt",
+    link: "/about",
+    name: "About",
     color: 'white',
   },
   // {
