@@ -1,7 +1,7 @@
 # Overview
 - This is a web project. <br />
 - The frontend uses Next.js framework and is hosted on Vercel. <br />
-- The [backend](https://github.com/BaoTran685/python-server__password-encrypter) uses Nginx as the webser and reverse proxy to handle incoming HTTP requests, Python Flask to process requests, and Gunicorn (a WSGI server) as a bridge between them to balance the load. All of them together make my web application stable and reliable in production. <br />
+- The backend uses Nginx as the webser and reverse proxy to handle incoming HTTP requests, Python Flask to process requests, and Gunicorn (a WSGI server) as a bridge between them to balance the load. All of them together make my web application stable and reliable in production. <br />
 - The backend and the MySQL database storing encryption keys are hosted on AWS EC2. <br />
 
 # What is in it?
